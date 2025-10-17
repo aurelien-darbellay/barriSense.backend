@@ -7,7 +7,6 @@ import com.barrisense.backend.auth.security.JwtAuthenticationFilter;
 import com.barrisense.backend.auth.security.JwtService;
 import com.barrisense.backend.auth.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -114,7 +112,7 @@ public class AuthController {
                 return ResponseEntity.ok(Map.of("message", "Access token refreshed"));
 
 
-        }
+            }
             return ResponseEntity.ok(Map.of("message", "Access token still valid"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid refresh token"));
@@ -133,11 +131,5 @@ public class AuthController {
         response.addHeader("Set-Cookie", JwtAuthenticationFilter.ACCESS_COOKIE + "=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         response.addHeader("Set-Cookie", "JWT_REFRESH=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         return ResponseEntity.ok(Map.of("message", "Logged out"));
-    }
-
-    @GetMapping("/csrf")
-    public Map<String, String> getCsrfToken(CsrfToken token) {
-        // ✅ Get the existing CSRF token created by CookieCsrfTokenRepository
-        return Map.of("token", token.getToken());
     }
 }

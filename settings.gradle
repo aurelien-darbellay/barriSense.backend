@@ -1,2 +1,3 @@
 rootProject.name = 'barriSense.backend'
 include 'auth-service'
+include 'gateway-service'

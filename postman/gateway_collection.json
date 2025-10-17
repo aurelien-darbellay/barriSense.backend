@@ -1,0 +1,144 @@
+{
+  "info": {
+    "name": "Gateway (barriSense.backend)",
+    "_postman_id": "c8ff2b91-4b36-4a64-a75d-987654321def",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get CSRF (via Gateway)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/csrf",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "auth",
+            "csrf"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "const token = response.token;",
+              "if (token) {",
+              "  pm.environment.set('csrf_token', token);",
+              "  console.log('✅ CSRF token stored via Gateway:', token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2️⃣ Login (via Gateway)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/auth/login",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3️⃣ Me (via Gateway)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/auth/me",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4️⃣ Logout (via Gateway)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/auth/logout",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "auth",
+            "logout"
+          ]
+        }
+      }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// Add CSRF token automatically for unsafe HTTP methods",
+          "const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];",
+          "const method = pm.request.method;",
+          "const token = pm.environment.get('csrf_token');",
+          "",
+          "if (unsafeMethods.includes(method)) {",
+          "    if (token) {",
+          "        pm.request.headers.remove('X-XSRF-TOKEN');",
+          "        pm.request.headers.add({ key: 'X-XSRF-TOKEN', value: token });",
+          "        console.log(`✅ Added X-XSRF-TOKEN header for ${method} request:`, token);",
+          "    } else {",
+          "        console.warn(`⚠️ No csrf_token found in environment before ${method} request.`);",
+          "    }",
+          "} else {",
+          "    console.log(`ℹ️ CSRF header not needed for ${method} request.`);",
+          "}"
+        ],
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [],
+        "type": "text/javascript"
+      }
+    }
+  ]
+}

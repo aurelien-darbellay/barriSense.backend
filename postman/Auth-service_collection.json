@@ -1,148 +1,134 @@
 {
   "info": {
-    "_postman_id": "barrisense-auth-collection",
     "name": "Auth Service (Localhost)",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exported_at": "2025-10-16T18:00:00.000Z"
+    "_postman_id": "3a23c3a4-45d2-4b6b-9a3a-2e0f7d47abcd",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
-    {
-      "name": "Get CSRF Token",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "try {",
-              "    const response = pm.response.json();",
-              "    const token = response.token;",
-              "",
-              "    if (token) {",
-              "        pm.environment.set('csrf_token', token);",
-              "        console.log('✅ Stored CSRF token in environment:', token);",
-              "    } else {",
-              "        console.warn(\"⚠️ No 'token' field found in response JSON.\");",
-              "    }",
-              "} catch (e) {",
-              "    console.error('❌ Failed to parse CSRF token from response:', e);",
-              "}"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/auth/csrf",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "csrf"]
-        }
-      },
-      "response": []
-    },
     {
       "name": "Register User",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
-        "url": {
-          "raw": "{{base_url}}/auth/register",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "register"]
-        },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}:{{auth_port}}/auth/register",
+          "host": [
+            "{{base_url}}:{{auth_port}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
         }
-      },
-      "response": []
+      }
     },
     {
       "name": "Login",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
-        "url": {
-          "raw": "{{base_url}}/auth/login",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "login"]
-        },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}:{{auth_port}}/auth/login",
+          "host": [
+            "{{base_url}}:{{auth_port}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
         }
-      },
-      "response": []
+      }
     },
     {
-      "name": "Get Current User (Me)",
+      "name": "Me",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/auth/me",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "me"]
+          "raw": "{{base_url}}:{{auth_port}}/auth/me",
+          "host": [
+            "{{base_url}}:{{auth_port}}"
+          ],
+          "path": [
+            "auth",
+            "me"
+          ]
         }
-      },
-      "response": []
+      }
     },
     {
-      "name": "Refresh Token",
+      "name": "Refresh",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "{{base_url}}/auth/refresh",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "refresh"]
+          "raw": "{{base_url}}:{{auth_port}}/auth/refresh",
+          "host": [
+            "{{base_url}}:{{auth_port}}"
+          ],
+          "path": [
+            "auth",
+            "refresh"
+          ]
         }
-      },
-      "response": []
+      }
     },
     {
       "name": "Logout",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "{{base_url}}/auth/logout",
-          "host": ["{{base_url}}"],
-          "path": ["auth", "logout"]
+          "raw": "{{base_url}}:{{auth_port}}/auth/logout",
+          "host": [
+            "{{base_url}}:{{auth_port}}"
+          ],
+          "path": [
+            "auth",
+            "logout"
+          ]
         }
-      },
-      "response": []
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": { "exec": ["// Add CSRF token automatically for unsafe HTTP methods",
-        "const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];",
-        "const method = pm.request.method;",
-        "const token = pm.environment.get('csrf_token');",
-        "",
-        "if (unsafeMethods.includes(method)) {",
-        "    if (token) {",
-        "        pm.request.headers.remove('X-XSRF-TOKEN');",
-        "        pm.request.headers.add({ key: 'X-XSRF-TOKEN', value: token });",
-        "        console.log(`✅ Added X-XSRF-TOKEN header for ${method} request:`, token);",
-        "    } else {",
-        "        console.warn(`⚠️ No csrf_token found in environment before ${method} request.`);",
-        "    }",
-        "} else {",
-        "    console.log(`ℹ️ CSRF header not needed for ${method} request.`);",
-        "}"], "type": "text/javascript" }
-    },
-    {
-      "listen": "test",
-      "script": { "exec": [], "type": "text/javascript" }
+      }
     }
   ]
 }
