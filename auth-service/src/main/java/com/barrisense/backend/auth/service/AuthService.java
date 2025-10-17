@@ -4,7 +4,6 @@ import com.barrisense.backend.auth.controller.AuthDtos;
 import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.repository.UserRepository;
-import com.barrisense.backend.auth.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,6 +23,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CustomUserDetailsService userDetailsService;
 
     public void register(AuthDtos.RegisterRequest req) {
         if (userRepository.existsByUsername(req.username())) {
@@ -60,19 +59,14 @@ public class AuthService {
 
     public String refresh(String refreshToken) {
         String username = jwtService.extractUsername(refreshToken);
-        Optional<User> userOpt = userRepository.findByUsername(username);
 
-        if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
-        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        User user = userOpt.get();
-
-        if (!jwtService.isTokenValid(refreshToken, user)) {
+        if (!jwtService.isTokenValid(refreshToken, userDetails)) {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
 
-        return jwtService.generateAccessToken(user);
+        return jwtService.generateAccessToken(userDetails);
     }
 
     // Inner record to return token pair

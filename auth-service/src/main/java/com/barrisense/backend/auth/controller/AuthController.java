@@ -19,7 +19,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody AuthDtos.RegisterRequest req) {
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody AuthDtos.RegisterRequest req) {
         try {
             authService.register(req);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthDtos.LoginRequest req, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody AuthDtos.LoginRequest req, HttpServletResponse response) {
         try {
             var tokens = authService.login(req);
             response.addHeader("Set-Cookie", CookieUtil.formatCookieHeader("JWT", tokens.accessToken(), 3600));
@@ -44,8 +44,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(@CookieValue(value = "JWT_REFRESH", required = false) String refreshToken,
-                                     HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> refresh(@CookieValue(value = "JWT_REFRESH", required = false) String refreshToken,
+                                                       HttpServletResponse response) {
         if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Missing refresh token"));
@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> logout(HttpServletResponse response) {
         response.addHeader("Set-Cookie", "JWT=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         response.addHeader("Set-Cookie", "JWT_REFRESH=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
