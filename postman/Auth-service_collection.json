@@ -20,7 +20,7 @@
           "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/register",
+          "raw": "{{base_url}}:{{auth_port}}/auth/public/register",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],
@@ -46,7 +46,7 @@
           "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/login",
+          "raw": "{{base_url}}:{{auth_port}}/auth/public/login",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],
@@ -63,7 +63,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/me",
+          "raw": "{{base_url}}:{{auth_port}}/auth/protected/me",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],
@@ -86,7 +86,7 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/refresh",
+          "raw": "{{base_url}}:{{auth_port}}/auth/protected/refresh",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],
@@ -109,7 +109,7 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/logout",
+          "raw": "{{base_url}}:{{auth_port}}/auth/protected/logout",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],

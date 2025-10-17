@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/public")
 @RequiredArgsConstructor
-public class AuthController {
+public class PublicAuthController {
 
     private final AuthService authService;
 

@@ -26,3 +26,7 @@ spring:
 logging:
   level:
     org.springframework.cloud.gateway: INFO
+    
+jwt:
+  # Dev secret (HS256/HS512-friendly)
+  secret: dev-jwp-secret-key-1234567890abcdef1234567890abcdef

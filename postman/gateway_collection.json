@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "2️⃣ Login (via Gateway)",
+      "name": "Login (via Gateway)",
       "request": {
         "method": "POST",
         "header": [
@@ -57,7 +57,7 @@
           "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/auth/login",
+          "raw": "{{base_url}}:{{gateway_port}}/auth/public/login",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
@@ -69,23 +69,7 @@
       }
     },
     {
-      "name": "3️⃣ Me (via Gateway)",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/auth/me",
-          "host": [
-            "{{base_url}}:{{gateway_port}}"
-          ],
-          "path": [
-            "auth",
-            "me"
-          ]
-        }
-      }
-    },
-    {
-      "name": "4️⃣ Logout (via Gateway)",
+      "name": "Logout (via Gateway)",
       "request": {
         "method": "POST",
         "header": [
@@ -96,7 +80,7 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/auth/logout",
+          "raw": "{{base_url}}:{{gateway_port}}/auth/protected/logout",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
