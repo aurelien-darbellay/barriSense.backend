@@ -13,4 +13,10 @@ public class CookieUtil {
         // SameSite is not part of Cookie API; set via response header in controller
         return cookie;
     }
+
+    public static String formatCookieHeader(String name, String value, int maxAgeSeconds) {
+        return String.format("%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=Lax",
+                name, value, maxAgeSeconds);
+    }
+
 }
