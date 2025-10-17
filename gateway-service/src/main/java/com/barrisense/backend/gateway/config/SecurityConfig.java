@@ -9,6 +9,8 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.CsrfToken;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestHandler;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
@@ -29,7 +31,9 @@ public class SecurityConfig {
         // ----- CSRF (double-submit cookie + header) -----
         http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
-                .requireCsrfProtectionMatcher(exchange -> mapBooleanToMonoMatchResult(requiresCsrfProtection(exchange))));
+                .requireCsrfProtectionMatcher(exchange -> mapBooleanToMonoMatchResult(requiresCsrfProtection(exchange)))
+                .csrfTokenRequestHandler(doubleSubmitCsrfTokenHandler())
+        );
 
         // ----- Authorization rules -----
         http.authorizeExchange(auth -> auth
@@ -81,6 +85,24 @@ public class SecurityConfig {
             return isPublic ?
                     ServerWebExchangeMatcher.MatchResult.match() :
                     ServerWebExchangeMatcher.MatchResult.notMatch();
+        };
+    }
+
+    @Bean
+    public ServerCsrfTokenRequestHandler doubleSubmitCsrfTokenHandler() {
+        return new ServerCsrfTokenRequestHandler() {
+
+            @Override
+            public void handle(ServerWebExchange exchange, Mono<CsrfToken> monoCsrf) {
+                // Expose the CSRF token as an exchange attribute for controller access
+                exchange.getAttributes().put(CsrfToken.class.getName(), monoCsrf);
+            }
+
+            @Override
+            public Mono<String> resolveCsrfTokenValue(ServerWebExchange exchange, CsrfToken token) {
+                // Read CSRF token from the X-XSRF-TOKEN header
+                return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(token.getHeaderName()));
+            }
         };
     }
 
