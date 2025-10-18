@@ -28,19 +28,23 @@ public class JwtAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+
         ServerHttpRequest request = exchange.getRequest();
+        
         String path = request.getPath().toString();
 
         // Skip public/auth endpoints
-        if (path.startsWith("/auth/") || path.startsWith("/public/")) {
+        if (path.startsWith("/public/")) {
             return chain.filter(exchange);
         }
 
         // Try to read JWT from HttpOnly cookie
         HttpCookie jwtCookie = request.getCookies().getFirst("JWT");
+
         if (jwtCookie == null) {
             return chain.filter(exchange); // unauthenticated; will fail if required
         }
+
 
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
@@ -51,7 +55,10 @@ public class JwtAuthenticationFilter implements WebFilter {
                     .getBody();
 
             String username = claims.getSubject();
+
+            @SuppressWarnings("unchecked")
             List<String> roles = claims.get("roles", List.class);
+            if (roles == null) roles = List.of();
 
             var authorities = roles.stream()
                     .map(SimpleGrantedAuthority::new)
