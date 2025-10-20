@@ -1,5 +1,6 @@
 package com.barrisense.backend.auth.service;
 
+import com.barrisense.backend.auth.service.ports.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -26,7 +27,7 @@ public class JwtService {
     @Value("${jwt.refresh-expiration-seconds}")
     private long refreshExpirationSeconds;
 
-    static private final Logger log = LoggerFactory.getLogger(JwtService.class);
+    static private final Logger log = LoggerFactory.getLogger(JwtServiceImpl.class);
 
     private Key getSigningKey() {
         // secret is ASCII; use raw bytes

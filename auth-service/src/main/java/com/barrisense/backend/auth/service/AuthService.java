@@ -4,6 +4,7 @@ import com.barrisense.backend.auth.controller.AuthDtos;
 import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.repository.UserRepository;
+import com.barrisense.backend.auth.service.ports.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,10 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final JwtService jwtServiceImpl;
     private final UserDetailsService userDetailsService;
-    static private final Logger log = LoggerFactory.getLogger(AuthService.class);
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     public void register(AuthDtos.RegisterRequest req) {
         log.debug("Register new user: {}", req);
@@ -53,8 +55,8 @@ public class AuthService {
 
             UserDetails user = (UserDetails) auth.getPrincipal();
 
-            String accessToken = jwtService.generateAccessToken(user);
-            String refreshToken = jwtService.generateRefreshToken(user);
+            String accessToken = jwtServiceImpl.generateAccessToken(user);
+            String refreshToken = jwtServiceImpl.generateRefreshToken(user);
 
             return new TokenPair(accessToken, refreshToken);
 
@@ -65,15 +67,13 @@ public class AuthService {
 
     public String refresh(String refreshToken) {
         log.debug("Refreshing Jwt: {}", refreshToken);
-        String username = jwtService.extractUsername(refreshToken);
+        String username = jwtServiceImpl.extractUsername(refreshToken);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        if (!jwtService.isTokenValid(refreshToken, userDetails)) {
+        if (!jwtServiceImpl.isTokenValid(refreshToken, userDetails)) {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
-
-        return jwtService.generateAccessToken(userDetails);
+        return jwtServiceImpl.generateAccessToken(userDetails);
     }
 
     // Inner record to return token pair
