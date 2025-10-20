@@ -12,6 +12,22 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
 
+    dependencies {
+
+        //DB
+        runtimeOnly 'com.h2database:h2'
+
+        //test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        //lombok
+        compileOnly 'org.projectlombok:lombok:1.18.34'
+        annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+        //logging
+        implementation 'org.slf4j:slf4j-api'
+    }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
