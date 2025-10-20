@@ -90,6 +90,73 @@
           ]
         }
       }
+    },
+    {
+      "name": "Add Feedback (via Gateway)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/feedbacks/protected/new",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "feedbacks",
+            "protected",
+            "new"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1,\n  \"neighboorhoodId\": 22,\n  \"content\": \"Public spaces are well maintained.\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Number of Feedbacks by Neighborhood (via Gateway)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/feedbacks/public/feedbacks-by-hood",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "feedbacks",
+            "public",
+            "feedbacks-by-hood"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Feedbacks ",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/feedbacks/public/",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "feedbacks",
+            "public"
+          ]
+        }
+      }
     }
   ],
   "event": [

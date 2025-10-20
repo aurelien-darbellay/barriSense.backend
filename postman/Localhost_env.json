@@ -2,14 +2,41 @@
   "id": "2fba7a40-8be1-4b77-a830-123456789abc",
   "name": "Localhost_barriSense",
   "values": [
-    { "key": "base_url", "value": "http://localhost", "enabled": true },
-    { "key": "gateway_port", "value": "8080", "enabled": true },
-    { "key": "auth_port", "value": "8081", "enabled": true },
-    { "key": "user_port", "value": "8082", "enabled": true },
-    { "key": "feedback_port", "value": "8083", "enabled": true },
-    { "key": "csrf_token", "value": "", "enabled": true },
-    { "key": "jwt_access", "value": "", "enabled": true },
-    { "key": "jwt_refresh", "value": "", "enabled": true }
+    {
+      "key": "base_url",
+      "value": "http://localhost",
+      "enabled": true
+    },
+    {
+      "key": "gateway_port",
+      "value": "8080",
+      "enabled": true
+    },
+    {
+      "key": "auth_port",
+      "value": "8081",
+      "enabled": true
+    },
+    {
+      "key": "feedback_port",
+      "value": "8082",
+      "enabled": true
+    },
+    {
+      "key": "csrf_token",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "jwt_access",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "jwt_refresh",
+      "value": "",
+      "enabled": true
+    }
   ],
   "_postman_variable_scope": "environment",
   "_postman_exported_at": "2025-10-17T00:00:00.000Z",
