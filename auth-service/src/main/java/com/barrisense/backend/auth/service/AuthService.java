@@ -5,6 +5,8 @@ import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +26,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
+    static private final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     public void register(AuthDtos.RegisterRequest req) {
+        log.debug("Register new user: {}", req);
         if (userRepository.existsByUsername(req.username())) {
             throw new IllegalStateException("Username already exists");
         }
@@ -40,6 +44,7 @@ public class AuthService {
     }
 
     public TokenPair login(AuthDtos.LoginRequest req) {
+        log.debug("Login in: {}", req);
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.username(), req.password())
@@ -58,6 +63,7 @@ public class AuthService {
     }
 
     public String refresh(String refreshToken) {
+        log.debug("Refreshing Jwt: {}", refreshToken);
         String username = jwtService.extractUsername(refreshToken);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);

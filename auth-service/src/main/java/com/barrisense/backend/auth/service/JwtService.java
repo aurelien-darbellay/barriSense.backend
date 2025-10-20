@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class JwtService {
     @Value("${jwt.refresh-expiration-seconds}")
     private long refreshExpirationSeconds;
 
+    static private final Logger log = LoggerFactory.getLogger(JwtService.class);
+
     private Key getSigningKey() {
         // secret is ASCII; use raw bytes
         byte[] keyBytes = secret.getBytes();
@@ -36,10 +40,12 @@ public class JwtService {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        log.debug("Extracted user: {}", claimsResolver.apply(claims));
         return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
+        log.debug("Extracting all claims from toke: {}", token);
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
@@ -56,6 +62,7 @@ public class JwtService {
     }
 
     private String buildToken(String subject, long ttlSeconds) {
+        log.debug("Creating new token for user: {}", subject);
         long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(subject)
@@ -66,6 +73,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        log.debug("Checking validity of token: {}", token);
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

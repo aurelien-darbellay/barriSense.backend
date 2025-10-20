@@ -5,9 +5,14 @@ import com.barrisense.backend.auth.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -17,9 +22,11 @@ import java.util.Map;
 public class PublicAuthController {
 
     private final AuthService authService;
+    static private final Logger log = LoggerFactory.getLogger(PublicAuthController.class);
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody AuthDtos.RegisterRequest req) {
+        log.debug("Register new user {}:", req);
         try {
             authService.register(req);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -32,6 +39,7 @@ public class PublicAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody AuthDtos.LoginRequest req, HttpServletResponse response) {
+        log.debug("Login in for user {}:", req);
         try {
             var tokens = authService.login(req);
             response.addHeader("Set-Cookie", CookieUtil.formatCookieHeader("JWT", tokens.accessToken(), 3600));
@@ -41,31 +49,6 @@ public class PublicAuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", e.getMessage()));
         }
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<Map<String, String>> refresh(@CookieValue(value = "JWT_REFRESH", required = false) String refreshToken,
-                                                       HttpServletResponse response) {
-        if (refreshToken == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Missing refresh token"));
-        }
-
-        try {
-            String newAccessToken = authService.refresh(refreshToken);
-            response.addHeader("Set-Cookie", CookieUtil.formatCookieHeader("JWT", newAccessToken, 3600));
-            return ResponseEntity.ok(Map.of("message", "Access token refreshed"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpServletResponse response) {
-        response.addHeader("Set-Cookie", "JWT=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
-        response.addHeader("Set-Cookie", "JWT_REFRESH=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
-        return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
     }
 }
 

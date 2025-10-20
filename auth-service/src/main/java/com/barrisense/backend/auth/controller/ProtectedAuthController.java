@@ -4,6 +4,8 @@ import com.barrisense.backend.auth.service.AuthService;
 import com.barrisense.backend.auth.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -19,10 +21,13 @@ import java.util.Map;
 public class ProtectedAuthController {
 
     private final AuthService authService;
+    static private final Logger log = LoggerFactory.getLogger(ProtectedAuthController.class);
 
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, String>> refresh(@CookieValue(value = "JWT_REFRESH", required = false) String refreshToken,
                                                        HttpServletResponse response) {
+        log.debug("Refreshing JWT token with refresh token {}", refreshToken);
+
         if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Missing refresh token"));
@@ -39,6 +44,8 @@ public class ProtectedAuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletResponse response) {
+        log.debug("Logging out");
+
         response.addHeader("Set-Cookie", "JWT=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         response.addHeader("Set-Cookie", "JWT_REFRESH=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax");
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
