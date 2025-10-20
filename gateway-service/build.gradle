@@ -26,19 +26,14 @@ dependencies {
 
     // --- Observability ---
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.slf4j:slf4j-api'
 
     // --- JWT (jjwt) ---
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    // --- Lombok ---
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
     // --- Testing ---
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 

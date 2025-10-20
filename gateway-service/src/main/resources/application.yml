@@ -14,10 +14,10 @@ spring:
             - Path=/auth/**
           filters:
             - RewriteResponseHeader=Set-Cookie, Domain=localhost, Domain=localhost
-        - id: user-service
+        - id: feedback-service
           uri: http://localhost:8082
           predicates:
-            - Path=/users/**
+            - Path=/feedbacks/**
       default-filters:
         - RemoveResponseHeader=Server
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
