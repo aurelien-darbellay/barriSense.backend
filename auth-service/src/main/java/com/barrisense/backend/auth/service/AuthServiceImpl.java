@@ -1,9 +1,12 @@
 package com.barrisense.backend.auth.service;
 
-import com.barrisense.backend.auth.controller.AuthDtos;
 import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
+import com.barrisense.backend.auth.dto.AuthDtos;
+import com.barrisense.backend.auth.dto.TokenPair;
 import com.barrisense.backend.auth.repository.UserRepository;
+import com.barrisense.backend.auth.service.mappers.Mappers;
+import com.barrisense.backend.auth.service.ports.AuthService;
 import com.barrisense.backend.auth.service.ports.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,17 +24,18 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtServiceImpl;
     private final UserDetailsService userDetailsService;
+    private final Mappers mappers;
 
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public void register(AuthDtos.RegisterRequest req) {
+    public TokenPair register(AuthDtos.RegisterRequest req) {
         log.debug("Register new user: {}", req);
         if (userRepository.existsByUsername(req.username())) {
             throw new IllegalStateException("Username already exists");
@@ -43,7 +47,11 @@ public class AuthService {
                 .roles(Set.of(Role.ROLE_USER))
                 .build();
 
-        userRepository.save(user);
+        UserDetails userDetails = mappers.mapUserToUserDetails(userRepository.save(user));
+        String accessToken = jwtServiceImpl.generateAccessToken(userDetails);
+        String refreshToken = jwtServiceImpl.generateRefreshToken(userDetails);
+
+        return new TokenPair(accessToken, refreshToken);
     }
 
     public TokenPair login(AuthDtos.LoginRequest req) {
@@ -74,10 +82,6 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
         return jwtServiceImpl.generateAccessToken(userDetails);
-    }
-
-    // Inner record to return token pair
-    public record TokenPair(String accessToken, String refreshToken) {
     }
 }
 

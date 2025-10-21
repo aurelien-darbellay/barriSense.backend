@@ -1,4 +1,4 @@
-package com.barrisense.backend.auth.controller;
+package com.barrisense.backend.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
