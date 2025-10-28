@@ -2,20 +2,33 @@ server:
   port: 8082
 
 spring:
+  application:
+    name: barrisense-feedback-api
+
+  h2:
+    console:
+      enabled: true
+
   datasource:
-    url: jdbc:h2:mem:feedbackdb
-    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:barrisensedb;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
     username: sa
-    password: password
+    password:
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
 
 logging:
   level:
-    org.springframework: INFO
+    root: INFO
+    com.barriSenseBack.barrisense_feedback_api: DEBUG
+    org.hibernate.SQL: DEBUG
