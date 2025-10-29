@@ -13,6 +13,13 @@ declare -A services=(
 GIT_BASH_EXE="/c/Program Files/Git/git-bash.exe"
 ROOT_PATH=$(pwd)
 
+# ✅ Check if Git Bash exists before continuing
+if [ ! -f "$GIT_BASH_EXE" ]; then
+  echo "❌ Could not find Git Bash at: $GIT_BASH_EXE"
+  echo "Please check your installation path and update GIT_BASH_EXE in this script."
+  exit 1
+fi
+
 for service in "${!services[@]}"; do
   port=${services[$service]}
   echo "▶ Opening Git Bash for $service on port $port..."
