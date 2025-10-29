@@ -23,6 +23,11 @@
       "enabled": true
     },
     {
+      "key": "user_port",
+      "value": "8083",
+      "enabled": true
+    },
+    {
       "key": "csrf_token",
       "value": "",
       "enabled": true

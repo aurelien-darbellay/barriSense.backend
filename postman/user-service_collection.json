@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "User Service (barriSense.backend)",
+    "_postman_id": "user-service-collection",
+    "description": "Postman collection for the UserController of the User microservice (H2 in-memory DB, protected endpoints, cookie-based auth).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost"
+    },
+    {
+      "key": "user_port",
+      "value": "8081"
+    },
+    {
+      "key": "user_id",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "username",
+      "value": "johndoe"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get User by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}:{{user_port}}/api/users/protected/{{user_id}}",
+          "host": [
+            "{{base_url}}:{{user_port}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "protected",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User by Username",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}:{{user_port}}/api/users/protected/by-username/{{username}}",
+          "host": [
+            "{{base_url}}:{{user_port}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "protected",
+            "by-username",
+            "{{username}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create New User (Cookie Auth)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}:{{user_port}}/api/users/protected/new",
+          "host": [
+            "{{base_url}}:{{user_port}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "protected",
+            "new"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"johndoe\",\n  \"email\": \"john@example.com\",\n  \"profilePictureUrl\": \"https://example.com/pic.jpg\",\n  \"active\": true\n}"
+        },
+        "description": "Requires cookie-based authentication. Make sure to log in via the Auth Service before sending this request so Postman stores the session cookie."
+      },
+      "response": []
+    },
+    {
+      "name": "Update User by Username (Cookie Auth)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}:{{user_port}}/api/users/protected/by-username/{{username}}",
+          "host": [
+            "{{base_url}}:{{user_port}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "protected",
+            "by-username",
+            "{{username}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.new@example.com\",\n  \"profilePictureUrl\": \"https://example.com/newpic.jpg\",\n  \"active\": false\n}"
+        },
+        "description": "Requires cookie-based authentication. Update selected fields by username."
+      },
+      "response": []
+    },
+    {
+      "name": "Delete User by Username (Cookie Auth)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}:{{user_port}}/api/users/protected/by-username/{{username}}",
+          "host": [
+            "{{base_url}}:{{user_port}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "protected",
+            "by-username",
+            "{{username}}"
+          ]
+        },
+        "description": "Requires cookie-based authentication. Permanently deletes the user by username."
+      },
+      "response": []
+    }
+  ]
+}
