@@ -2,6 +2,7 @@ package com.barrisense.backend.gateway.config;
 
 import com.barrisense.backend.gateway.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -16,7 +17,7 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-
+@Slf4j
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
@@ -37,12 +38,8 @@ public class SecurityConfig {
 
         // ----- Authorization rules -----
         http.authorizeExchange(auth -> auth
-                .matchers(publicPathMatcher()).permitAll()
-                // Public and auth endpoints
-                .pathMatchers("/csrf").permitAll()
-                // Protected endpoints
-                // Everything else
-                .anyExchange().authenticated()
+                .matchers(protectedPathMatcher()).authenticated()
+                .anyExchange().permitAll()
         );
 
         // ----- Custom JWT Authentication filter -----
@@ -78,11 +75,12 @@ public class SecurityConfig {
         return result ? ServerWebExchangeMatcher.MatchResult.match() : ServerWebExchangeMatcher.MatchResult.notMatch();
     }
 
-    private ServerWebExchangeMatcher publicPathMatcher() {
+    private ServerWebExchangeMatcher protectedPathMatcher() {
         return exchange -> {
             String path = exchange.getRequest().getPath().toString();
-            boolean isPublic = path.contains("/public/");
-            return isPublic ?
+            boolean isProtected = path.contains("/protected");
+            log.info("The path {} is protected: {}", path, isProtected);
+            return isProtected ?
                     ServerWebExchangeMatcher.MatchResult.match() :
                     ServerWebExchangeMatcher.MatchResult.notMatch();
         };
