@@ -97,7 +97,7 @@ public class ComplaintController {
      * @param complaint El objeto {@link Complaint} recibido en el cuerpo de la petición.
      * @return La queja guardada, envuelta en una respuesta HTTP 200 OK.
      */
-    @PostMapping
+    @PostMapping("/protected")
     public ResponseEntity<Complaint> createComplaint(@RequestBody Complaint complaint) {
         ComplaintControllerLogEvent.REQUEST_CREATE.log(logger);
         Complaint savedComplaint = complaintService.save(complaint);
