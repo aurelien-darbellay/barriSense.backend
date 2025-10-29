@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth/protected")
+@RequestMapping("/api/auth/protected")
 @RequiredArgsConstructor
 public class ProtectedAuthController {
 
