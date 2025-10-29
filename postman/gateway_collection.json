@@ -107,7 +107,7 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/feedbacks/protected/new",
+          "raw": "{{base_url}}:{{gateway_port}}/complaints/protected",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
@@ -119,7 +119,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"userId\": 1,\n  \"neighboorhoodId\": 22,\n  \"content\": \"Public spaces are well maintained.\"\n}"
+          "raw": "{\n  \"userId\": 1,\n  \"hoodId\": 3,\n  \"hoodName\": \"Raval\",\n  \"content\": \"Too much noise at night near the plaza.\"\n}"
         }
       }
     },

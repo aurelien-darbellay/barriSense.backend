@@ -20,7 +20,7 @@
           "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/public/register",
+          "raw": "{{base_url}}:{{auth_port}}/auth/register",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],
@@ -46,7 +46,7 @@
           "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}:{{auth_port}}/auth/public/login",
+          "raw": "{{base_url}}:{{auth_port}}/auth/login",
           "host": [
             "{{base_url}}:{{auth_port}}"
           ],

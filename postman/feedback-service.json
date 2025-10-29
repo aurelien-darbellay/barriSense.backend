@@ -146,7 +146,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"userId\": 1,\n  \"neighboorhoodId\": 3,\n  \"content\": \"Too much noise at night near the plaza.\"\n}"
+          "raw": "{\n  \"userId\": 1,\n  \"hoodId\": 3,\n  \"hoodName\": \"Raval\",\n  \"content\": \"Too much noise at night near the plaza.\"\n}"
         },
         "description": "Requires cookie-based authentication. Make sure to log in via the Auth Service before sending this request so that Postman stores the session cookie automatically."
       },
