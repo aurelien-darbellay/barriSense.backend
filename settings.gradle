@@ -1,4 +1,4 @@
 rootProject.name = 'barriSense.backend'
 include 'auth-service'
 include 'gateway-service'
-include 'feedback-service'
+include 'complaint-service'
