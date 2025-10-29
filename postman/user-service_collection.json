@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "User Service (barriSense.backend)",
-    "_postman_id": "user-service-collection",
+    "_postman_id": "user-service-collection_v2",
     "description": "Postman collection for the UserController of the User microservice (H2 in-memory DB, protected endpoints, cookie-based auth).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -16,7 +16,7 @@
     },
     {
       "key": "user_id",
-      "value": "00000000-0000-0000-0000-000000000000"
+      "value": "1"
     },
     {
       "key": "username",

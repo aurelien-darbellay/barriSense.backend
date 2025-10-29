@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Componente que se ejecuta al inicio de la aplicación para poblar la base de datos de usuarios
@@ -79,7 +78,6 @@ public class DataInitializer implements CommandLineRunner {
             boolean active = random.nextBoolean();
 
             User user = User.builder()
-                    .id(UUID.randomUUID())
                     .username(username)
                     .email(email)
                     .profilePictureUrl(profileUrl)
