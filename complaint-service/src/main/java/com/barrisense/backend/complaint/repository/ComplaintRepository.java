@@ -41,6 +41,6 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
      *
      * @return Una lista de FeedbackCountDTO, uno por cada barrio que tenga quejas.
      */
-    @Query("SELECT new dto.com.barrisense.backend.complaint.ComplaintCountDTO(f.hoodId, COUNT(f)) FROM Complaint f GROUP BY f.hoodId")
+    @Query("SELECT new com.barrisense.backend.complaint.dto.ComplaintCountDTO(f.hoodId, COUNT(f)) FROM Complaint f GROUP BY f.hoodId")
     List<ComplaintCountDTO> countAllGroupByHoodId();
 }
