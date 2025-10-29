@@ -65,10 +65,8 @@ public class SecurityConfig {
         String method = exchange.getRequest().getMethod().name().toUpperCase();
 
         boolean isStateChanging = method.matches("POST|PUT|PATCH|DELETE");
-        boolean isProtectedPath = path.contains("/protected/");
-        boolean isAuthException =
-                path.contains("/public/");
-        return isStateChanging && isProtectedPath && !isAuthException;
+        boolean isProtectedPath = path.contains("/protected");
+        return isStateChanging && isProtectedPath;
     }
 
     private Mono<ServerWebExchangeMatcher.MatchResult> mapBooleanToMonoMatchResult(boolean result) {
