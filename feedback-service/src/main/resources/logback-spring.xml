@@ -4,7 +4,8 @@
     <property name="APP_NAME" value="barrisense-feedback-api"/>
     <property name="LOGS_DIR" value="${user.home}/${APP_NAME}/logs"/>
 
-    <property name="CONSOLE_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan([%15.15thread]) %magenta(%-40.40logger{40}) - %msg%n"/>
+    <property name="CONSOLE_PATTERN"
+              value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan([%15.15thread]) %magenta(%-40.40logger{40}) - %msg%n"/>
     <property name="EVENT_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(➤) %cyan(%-40.40logger{40}) - %msg%n"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -61,7 +62,7 @@
     </appender>
 
     <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="DETAILED_FILE" />
+        <appender-ref ref="DETAILED_FILE"/>
         <queueSize>512</queueSize>
         <discardingThreshold>0</discardingThreshold>
         <includeCallerData>false</includeCallerData>

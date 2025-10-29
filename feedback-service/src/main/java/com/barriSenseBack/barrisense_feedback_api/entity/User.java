@@ -4,9 +4,6 @@ package com.barriSenseBack.barrisense_feedback_api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Builder // Mantenemos el Builder, es demasiado útil para los tests
 @NoArgsConstructor // Constructor sin argumentos para JPA
 @AllArgsConstructor
@@ -21,7 +18,8 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Getter @Setter
+    @Getter
+    @Setter
     private String username;
 
     @Column(nullable = false, unique = true)
@@ -29,14 +27,13 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    @Getter @Setter
+    @Getter
+    @Setter
     private String password;
 
     // Role stuff
     // @ManyToMany(...)
     // private Set<Role> roles;
-
-
 
 
 }

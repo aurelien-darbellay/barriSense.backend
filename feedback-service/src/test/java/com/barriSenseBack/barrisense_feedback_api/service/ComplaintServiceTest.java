@@ -1,6 +1,6 @@
 package com.barriSenseBack.barrisense_feedback_api.service;
 
-import com.barriSenseBack.barrisense_feedback_api.dto.ComplaintCountDTO; // <-- DTO RENOMBRADO
+import com.barriSenseBack.barrisense_feedback_api.dto.ComplaintCountDTO;
 import com.barriSenseBack.barrisense_feedback_api.entity.Complaint;
 import com.barriSenseBack.barrisense_feedback_api.repository.ComplaintRepository;
 import org.junit.jupiter.api.Test;

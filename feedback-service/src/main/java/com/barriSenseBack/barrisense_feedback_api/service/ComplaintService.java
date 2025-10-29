@@ -24,6 +24,7 @@ public class ComplaintService {
 
     /**
      * Recupera todas las quejas de la base de datos.
+     *
      * @return una lista de quejas.
      */
     public List<Complaint> findAll() {
@@ -33,6 +34,7 @@ public class ComplaintService {
 
     /**
      * Busca una queja por su ID.
+     *
      * @param id El ID de la queja a buscar.
      * @return un Optional que contiene la queja si se encuentra, o un Optional vacío si no.
      */
@@ -48,6 +50,7 @@ public class ComplaintService {
 
     /**
      * Calcula el número de quejas para un barrio y devuelve el resultado en un DTO.
+     *
      * @param hoodId El ID del barrio.
      * @return un DTO con el ID del barrio y el total de quejas.
      */
@@ -59,6 +62,7 @@ public class ComplaintService {
 
     /**
      * Devuelve todas las quejas asociadas a un ID de barrio.
+     *
      * @param hoodId El ID del barrio.
      * @return una lista de objetos Complaint.
      */
@@ -69,6 +73,7 @@ public class ComplaintService {
 
     /**
      * Devuelve una lista con el total de quejas para cada barrio.
+     *
      * @return una lista de objetos ComplaintCountDTO.
      */
     public List<ComplaintCountDTO> countAllComplaintsByNeighborhood() {
@@ -79,6 +84,7 @@ public class ComplaintService {
 
     /**
      * Guarda una nueva queja en la base de datos.
+     *
      * @param complaint La queja a guardar.
      * @return la queja guardada con su ID asignado.
      */

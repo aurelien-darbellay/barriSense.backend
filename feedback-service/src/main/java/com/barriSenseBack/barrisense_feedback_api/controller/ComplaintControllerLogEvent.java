@@ -20,8 +20,12 @@ public enum ComplaintControllerLogEvent implements Loggable {
     }
 
     @Override
-    public LogLevel getLevel() { return this.level; }
+    public LogLevel getLevel() {
+        return this.level;
+    }
 
     @Override
-    public String getMessageTemplate() { return this.messageTemplate; }
+    public String getMessageTemplate() {
+        return this.messageTemplate;
+    }
 }

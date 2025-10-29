@@ -3,9 +3,9 @@ package com.barriSenseBack.barrisense_feedback_api.dto;
 public class RegisterRequest {
 
 
-        private String username;
-        private String email;
-        private String password;
+    private String username;
+    private String email;
+    private String password;
 
     public String getUsername() {
         return username;

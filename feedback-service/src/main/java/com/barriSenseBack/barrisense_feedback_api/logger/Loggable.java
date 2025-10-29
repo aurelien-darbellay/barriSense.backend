@@ -52,8 +52,8 @@ public interface Loggable {
     default void log(Logger logger, Object... params) {
         switch (this.getLevel()) {
             case DEBUG -> logger.debug(this.getMessageTemplate(), params);
-            case INFO  -> logger.info(this.getMessageTemplate(), params);
-            case WARN  -> logger.warn(this.getMessageTemplate(), params);
+            case INFO -> logger.info(this.getMessageTemplate(), params);
+            case WARN -> logger.warn(this.getMessageTemplate(), params);
             case ERROR -> logger.error(this.getMessageTemplate(), params);
         }
     }

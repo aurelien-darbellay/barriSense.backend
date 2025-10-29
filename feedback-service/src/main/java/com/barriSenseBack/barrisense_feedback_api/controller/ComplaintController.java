@@ -55,6 +55,7 @@ public class ComplaintController {
     /**
      * Endpoint para obtener el número de quejas por ID de barrio.
      * HTTP GET /api/complaints/count/by-neighborhood/{hoodId}
+     *
      * @param hoodId El ID del barrio pasado en la URL.
      * @return Un objeto JSON con el ID del barrio y el total de quejas.
      */
@@ -67,6 +68,7 @@ public class ComplaintController {
     /**
      * Endpoint para obtener todas las quejas de un barrio específico por su ID.
      * HTTP GET /api/complaints/by-neighborhood/{hoodId}
+     *
      * @param hoodId El ID del barrio pasado en la URL.
      * @return Una lista de objetos Complaint en formato JSON.
      */
@@ -79,6 +81,7 @@ public class ComplaintController {
     /**
      * Endpoint para obtener el número de quejas para todos los barrios.
      * HTTP GET /api/complaints/count/by-neighborhood/all
+     *
      * @return Una lista de objetos JSON, cada uno con un ID de barrio y su total de quejas.
      */
     @GetMapping("/count/by-neighborhood/all")
@@ -90,6 +93,7 @@ public class ComplaintController {
     /**
      * Endpoint para crear una nueva queja.
      * HTTP POST /api/complaints
+     *
      * @param complaint El objeto {@link Complaint} recibido en el cuerpo de la petición.
      * @return La queja guardada, envuelta en una respuesta HTTP 200 OK.
      */

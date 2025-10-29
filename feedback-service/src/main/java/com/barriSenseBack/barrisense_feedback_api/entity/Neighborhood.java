@@ -19,18 +19,20 @@ public class Neighborhood {
     private Long id;
 
     @Column(name = "nombre")
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String district;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "neighborhood_postal_codes", joinColumns = @JoinColumn(name = "neighborhood_id"))
     @Column(name = "postal_code")
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<Long> cp;
-
 
 
 }
