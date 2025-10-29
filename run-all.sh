@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "🚀 Starting all Barrisense microservices..."
+
+echo "🚀 Starting all Barrisense microservices (in new Git Bash windows)..."
 
 declare -A services=(
   ["gateway-service"]=8080
@@ -8,10 +9,17 @@ declare -A services=(
   ["auth-service"]=8081
 )
 
-for s in "${!services[@]}"; do
-  port=${services[$s]}
-  echo "▶ Starting $s on port $port..."
-  (cd $s && ./gradlew bootRun > "../logs/$s.log" 2>&1 &)
+# Path to Git Bash executable (adjust if needed)
+GIT_BASH_EXE="/c/Program Files/Git/git-bash.exe"
+ROOT_PATH=$(pwd)
+
+for service in "${!services[@]}"; do
+  port=${services[$service]}
+  echo "▶ Opening Git Bash for $service on port $port..."
+
+  # ⚙️ Empty first arg → correct syntax for Windows `start`
+  # Then inside Git Bash: set ANSI title, cd, run Gradle, keep shell open
+  start "" "$GIT_BASH_EXE" -c "echo -ne '\033]0;barrisense-${service}\007' && cd \"$ROOT_PATH\" && ./gradlew :${service}:bootRun; exec bash"
 done
 
-echo "✅ All services started in background. Logs in /logs/"
+echo "✅ All services started in new Git Bash windows!"

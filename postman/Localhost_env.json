@@ -1,5 +1,5 @@
 {
-  "id": "2fba7a40-8be1-4b77-a830-123456789abz",
+  "id": "2fba7a40-8be1-4b77-a830-123456789abi",
   "name": "Localhost_barriSense",
   "values": [
     {
@@ -40,6 +40,16 @@
     {
       "key": "jwt_refresh",
       "value": "",
+      "enabled": true
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "username",
+      "value": "johndoe",
       "enabled": true
     }
   ],

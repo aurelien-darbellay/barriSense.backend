@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Gateway (barriSense.backend)",
-    "_postman_id": "c8ff2b91-4b36-4a64-a75d-987654321dez",
+    "_postman_id": "gateway-service_collection_v2",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -15,6 +15,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "auth",
             "csrf"
           ]
@@ -36,6 +37,39 @@
           }
         }
       ]
+    },
+    {
+      "name": "Register (via Gateway)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrf_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}:{{gateway_port}}/api/auth/register",
+          "host": [
+            "{{base_url}}:{{gateway_port}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Registers a new user through the Gateway. Requires a valid CSRF token. After registering, you can log in using the same credentials."
+      }
     },
     {
       "name": "Login (via Gateway)",
@@ -62,6 +96,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "auth",
             "login"
           ]
@@ -85,7 +120,9 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "auth",
+            "protected",
             "logout"
           ]
         }
@@ -107,11 +144,12 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/complaints/protected",
+          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/protected/new",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "feedbacks",
             "protected",
             "new"
@@ -129,11 +167,12 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/complaints/count/by-neighborhood/all",
+          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/public/feedbacks-by-hood",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "feedbacks",
             "public",
             "feedbacks-by-hood"
@@ -147,11 +186,12 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/complaints",
+          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/public",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "feedbacks",
             "public"
           ]
@@ -178,6 +218,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "users",
             "protected",
             "{{user_id}}"
@@ -196,6 +237,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "users",
             "protected",
             "by-username",
@@ -220,6 +262,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "users",
             "protected",
             "new"
@@ -247,6 +290,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "users",
             "protected",
             "by-username",
@@ -270,6 +314,7 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
+            "api",
             "users",
             "protected",
             "by-username",
@@ -313,4 +358,3 @@
     }
   ]
 }
-

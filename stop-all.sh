@@ -1,24 +1,11 @@
 #!/bin/bash
 
-echo "🛑 Stopping all Barrisense microservices..."
+echo "🛑 Stopping all Barrisense microservices (Git Bash windows)..."
 
-if [ ! -d "logs" ]; then
-  echo "No logs directory found. Nothing to stop."
-  exit 0
-fi
+# mintty titles show up in the window list, so we can target them
+taskkill //FI "WINDOWTITLE eq barrisense-*" //T //F >nul 2>&1
 
-for pidfile in logs/*.pid; do
-  if [ -f "$pidfile" ]; then
-    pid=$(cat "$pidfile")
-    service=$(basename "$pidfile" .pid)
-    if ps -p "$pid" > /dev/null 2>&1; then
-      echo "⛔ Stopping $service (PID $pid)..."
-      kill "$pid"
-    else
-      echo "⚠️  Process $pid for $service not found."
-    fi
-    rm -f "$pidfile"
-  fi
-done
+# Stop Gradle daemons just in case
+./gradlew --stop >nul 2>&1
 
-echo "✅ All services stopped."
+echo "✅ All Barrisense microservices stopped (IntelliJ and other terminals left alone)."
