@@ -8,3 +8,4 @@ out/
 .settings/
 *.iml
 .DS_Store
+logs/
