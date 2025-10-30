@@ -42,9 +42,7 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalStateException("Email already exists: " + user.getEmail());
         }
-
-        // id, createdAt handled automatically
-        user.setId(null);
+        
         return userRepository.save(user);
     }
 
