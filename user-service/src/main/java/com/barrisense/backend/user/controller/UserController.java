@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
+    public User getById(@PathVariable UUID id) {
         log.debug("HTTP GET /{id} -> {}", id);
         return userService.getById(id);
     }

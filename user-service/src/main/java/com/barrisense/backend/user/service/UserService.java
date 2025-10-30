@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public User getById(Long id) {
+    public User getById(UUID id) {
         log.debug("Fetching user by id {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id " + id));

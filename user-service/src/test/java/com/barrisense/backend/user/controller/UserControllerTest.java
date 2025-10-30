@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -36,7 +37,7 @@ class UserControllerTest {
 
     private static User sampleUser() {
         return User.builder()
-                .id(1L)
+                .id(UUID.randomUUID())
                 .username("johndoe")
                 .email("john@example.com")
                 .profilePictureUrl("https://example.com/pic.jpg")
@@ -84,7 +85,7 @@ class UserControllerTest {
                 .build();
 
         User savedUser = User.builder()
-                .id(1L)
+                .id(UUID.randomUUID())
                 .username("newuser")
                 .email("new@example.com")
                 .profilePictureUrl("https://example.com/pic.jpg")
