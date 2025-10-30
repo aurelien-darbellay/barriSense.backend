@@ -4,6 +4,8 @@ import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.dto.AuthDtos;
 import com.barrisense.backend.auth.dto.TokenPair;
+import com.barrisense.backend.auth.dto.UserCreatedEvent;
+import com.barrisense.backend.auth.messaging.UserEventPublisher;
 import com.barrisense.backend.auth.repository.UserRepository;
 import com.barrisense.backend.auth.service.mappers.Mappers;
 import com.barrisense.backend.auth.service.ports.AuthService;
@@ -31,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtServiceImpl;
     private final UserDetailsService userDetailsService;
+    private final UserEventPublisher userEventPublisher;
     private final Mappers mappers;
 
     private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
@@ -48,10 +51,9 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         UserDetails userDetails = mappers.mapUserToUserDetails(userRepository.save(user));
-        String accessToken = jwtServiceImpl.generateAccessToken(userDetails);
-        String refreshToken = jwtServiceImpl.generateRefreshToken(userDetails);
-
-        return new TokenPair(accessToken, refreshToken);
+        UserCreatedEvent event = new UserCreatedEvent(user.getId(), user.getUsername(), user.getRoles());
+        userEventPublisher.sendUserCreated(event);
+        return createTokenPair(userDetails);
     }
 
     public TokenPair login(AuthDtos.LoginRequest req) {
@@ -60,14 +62,8 @@ public class AuthServiceImpl implements AuthService {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.username(), req.password())
             );
-
             UserDetails user = (UserDetails) auth.getPrincipal();
-
-            String accessToken = jwtServiceImpl.generateAccessToken(user);
-            String refreshToken = jwtServiceImpl.generateRefreshToken(user);
-
-            return new TokenPair(accessToken, refreshToken);
-
+            return createTokenPair(user);
         } catch (BadCredentialsException e) {
             throw new IllegalArgumentException("Invalid credentials");
         }
@@ -82,6 +78,13 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
         return jwtServiceImpl.generateAccessToken(userDetails);
+    }
+
+    private TokenPair createTokenPair(UserDetails userDetails) {
+        String accessToken = jwtServiceImpl.generateAccessToken(userDetails);
+        String refreshToken = jwtServiceImpl.generateRefreshToken(userDetails);
+
+        return new TokenPair(accessToken, refreshToken);
     }
 }
 
