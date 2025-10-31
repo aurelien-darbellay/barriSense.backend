@@ -30,3 +30,6 @@ logging:
   level:
     root: INFO
     com.barrisense.backend.user: DEBUG
+
+profiles:
+  active: dev

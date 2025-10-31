@@ -43,3 +43,7 @@ security:
 logging:
   level:
     org.springframework.security: INFO
+
+profiles:
+  active: dev
+

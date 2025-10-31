@@ -62,11 +62,8 @@ public class SecurityConfig {
      */
     private boolean requiresCsrfProtection(ServerWebExchange exchange) {
         String path = exchange.getRequest().getPath().toString();
-        String method = exchange.getRequest().getMethod().name().toUpperCase();
 
-        boolean isStateChanging = method.matches("POST|PUT|PATCH|DELETE");
-        boolean isProtectedPath = path.contains("/protected");
-        return isStateChanging && isProtectedPath;
+        return path.contains("/protected");
     }
 
     private Mono<ServerWebExchangeMatcher.MatchResult> mapBooleanToMonoMatchResult(boolean result) {

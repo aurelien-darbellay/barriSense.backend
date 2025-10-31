@@ -4,12 +4,14 @@ import com.barrisense.backend.auth.domain.Role;
 import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.dto.AuthDtos;
 import com.barrisense.backend.auth.dto.TokenPair;
+import com.barrisense.backend.auth.messaging.UserEventPublisher;
 import com.barrisense.backend.auth.repository.UserRepository;
 import com.barrisense.backend.auth.service.mappers.Mappers;
 import com.barrisense.backend.auth.service.ports.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 import java.util.Set;
@@ -35,8 +38,10 @@ class AuthServiceImplTest {
     private AuthenticationManager authenticationManager;
     @Mock
     private JwtService jwtService;
+    @Mock
+    private UserEventPublisher publisher;
 
-    private Mappers mappers; // real instance
+    @InjectMocks
     private AuthServiceImpl authService;
 
     @BeforeEach
@@ -44,19 +49,13 @@ class AuthServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         // 🧠 Real mapper (you can replace with your actual implementation if it’s a record/class)
-        mappers = new Mappers();
+        Mappers mappers = new Mappers();
 
         // ✅ Real CustomUserDetailsService (wired with mocks and real mapper)
         CustomUserDetailsService realUserDetailsService = new CustomUserDetailsService(userRepository, mappers);
 
-        authService = new AuthServiceImpl(
-                userRepository,
-                passwordEncoder,
-                authenticationManager,
-                jwtService,
-                realUserDetailsService,
-                mappers
-        );
+        ReflectionTestUtils.setField(authService, "userDetailsService", realUserDetailsService);
+        ReflectionTestUtils.setField(authService, "mappers", mappers);
     }
 
     @Test

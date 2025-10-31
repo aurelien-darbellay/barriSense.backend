@@ -7,6 +7,7 @@ declare -A services=(
   ["user-service"]=8083
   ["complaint-service"]=8082
   ["auth-service"]=8081
+  ["api-docs-service"]=8089
 )
 
 # Path to Git Bash executable (adjust if needed)

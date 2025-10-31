@@ -32,3 +32,6 @@ logging:
     root: INFO
     com.barriSenseBack.barrisense_feedback_api: DEBUG
     org.hibernate.SQL: DEBUG
+
+profiles:
+  active: dev
