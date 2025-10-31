@@ -20,6 +20,8 @@ spring:
     port: 5672
     username: admin
     password: admin
+  profiles:
+    active: dev
 
 server:
   port: 8083
@@ -31,5 +33,4 @@ logging:
     root: INFO
     com.barrisense.backend.user: DEBUG
 
-profiles:
-  active: dev
+
