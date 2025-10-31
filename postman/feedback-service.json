@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Feedback Service(barriSense.backend)",
-    "_postman_id": "feedback-service-collection",
+    "name": "Complaint Service(barriSense.backend)",
+    "_postman_id": "complaint-service-collection",
     "description": "Postman collection for the ComplaintController of the Feedback microservice (H2 in-memory DB, public and protected endpoints, cookie-based auth).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -11,7 +11,7 @@
       "value": "http://localhost"
     },
     {
-      "key": "feedback_port",
+      "key": "complaint_port",
       "value": "8082"
     },
     {
@@ -30,9 +30,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",
@@ -48,9 +48,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints/{{complaint_id}}",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints/{{complaint_id}}",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",
@@ -67,9 +67,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints/count/by-neighborhood/{{hood_id}}",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints/count/by-neighborhood/{{hood_id}}",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",
@@ -88,9 +88,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints/by-neighborhood/{{hood_id}}",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints/by-neighborhood/{{hood_id}}",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",
@@ -108,9 +108,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints/count/by-neighborhood/all",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints/count/by-neighborhood/all",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",
@@ -134,9 +134,9 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{feedback_port}}/api/complaints/protected",
+          "raw": "{{base_url}}:{{complaint_port}}/api/complaints/protected",
           "host": [
-            "{{base_url}}:{{feedback_port}}"
+            "{{base_url}}:{{complaint_port}}"
           ],
           "path": [
             "api",

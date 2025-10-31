@@ -1,0 +1,58 @@
+version: "3.9"
+name: barrisense-dev
+
+services:
+  gateway-service:
+    image: ghcr.io/barrisense/gateway-service:${GATEWAY_VERSION}
+    container_name: gateway-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    ports:
+      - "8080:8080"
+    networks:
+      - barrisense-net
+    expose:
+      - "8080"
+
+
+  auth-service:
+    image: ghcr.io/barrisense/auth-service:${AUTH_VERSION}
+    container_name: auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    networks:
+      - barrisense-net
+    expose:
+      - "8081"
+
+  complaint-service:
+    image: ghcr.io/barrisense/complaint-service:${COMPLAINT_VERSION}
+    container_name: complaint-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    networks:
+      - barrisense-net
+    expose:
+      - "8082"
+
+  user-service:
+    image: ghcr.io/barrisense/user-service:${USER_VERSION}
+    container_name: user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    networks:
+      - barrisense-net
+    expose:
+      - "8083"
+
+networks:
+  barrisense-net:
+    external: true

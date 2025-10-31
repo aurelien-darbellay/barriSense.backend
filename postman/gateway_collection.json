@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Gateway (barriSense.backend)",
-    "_postman_id": "gateway-service_collection_v2",
+    "_postman_id": "gateway-service_collection_v5.01",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -15,8 +15,6 @@
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
-            "api",
-            "auth",
             "csrf"
           ]
         }
@@ -55,7 +53,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"}"
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
         },
         "url": {
           "raw": "{{base_url}}:{{gateway_port}}/api/auth/register",
@@ -68,8 +66,25 @@
             "register"
           ]
         },
-        "description": "Registers a new user through the Gateway. Requires a valid CSRF token. After registering, you can log in using the same credentials."
-      }
+        "description": "Registers a new user through the Gateway. Requires a valid CSRF token."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "try {",
+              "  const body = JSON.parse(pm.request.body.raw);",
+              "  if (body.username) {",
+              "    pm.environment.set('username', body.username);",
+              "    console.log('✅ username set from Register body:', body.username);",
+              "  }",
+              "} catch(e){console.warn('⚠️ Could not extract username from Register body');}"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Login (via Gateway)",
@@ -101,7 +116,24 @@
             "login"
           ]
         }
-      }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "try {",
+              "  const body = JSON.parse(pm.request.body.raw);",
+              "  if (body.username) {",
+              "    pm.environment.set('username', body.username);",
+              "    console.log('✅ username set from Login body:', body.username);",
+              "  }",
+              "} catch(e){console.warn('⚠️ Could not extract username from Login body');}"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Logout (via Gateway)",
@@ -129,7 +161,7 @@
       }
     },
     {
-      "name": "Add Feedback (via Gateway)",
+      "name": "Add Complaint (via Gateway)",
       "request": {
         "method": "POST",
         "header": [
@@ -144,15 +176,14 @@
           }
         ],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/protected/new",
+          "raw": "{{base_url}}:{{gateway_port}}/api/complaints/protected",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
             "api",
-            "feedbacks",
-            "protected",
-            "new"
+            "complaints",
+            "protected"
           ]
         },
         "body": {
@@ -165,17 +196,17 @@
       "name": "Get Number of Feedbacks by Neighborhood (via Gateway)",
       "request": {
         "method": "GET",
-        "header": [],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/public/feedbacks-by-hood",
+          "raw": "{{base_url}}:{{gateway_port}}/api/complaints/count/by-neighborhood/all",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
             "api",
-            "feedbacks",
-            "public",
-            "feedbacks-by-hood"
+            "complaints",
+            "count",
+            "by-neighborhood",
+            "all"
           ]
         }
       }
@@ -184,16 +215,14 @@
       "name": "Get All Feedbacks ",
       "request": {
         "method": "GET",
-        "header": [],
         "url": {
-          "raw": "{{base_url}}:{{gateway_port}}/api/feedbacks/public",
+          "raw": "{{base_url}}:{{gateway_port}}/api/complaints",
           "host": [
             "{{base_url}}:{{gateway_port}}"
           ],
           "path": [
             "api",
-            "feedbacks",
-            "public"
+            "complaints"
           ]
         }
       }
@@ -211,7 +240,6 @@
       "name": "User Service (via Gateway) → Get User by ID",
       "request": {
         "method": "GET",
-        "header": [],
         "url": {
           "raw": "{{base_url}}:{{gateway_port}}/api/users/protected/{{user_id}}",
           "host": [
@@ -230,7 +258,6 @@
       "name": "User Service (via Gateway) → Get User by Username",
       "request": {
         "method": "GET",
-        "header": [],
         "url": {
           "raw": "{{base_url}}:{{gateway_port}}/api/users/protected/by-username/{{username}}",
           "host": [
@@ -307,7 +334,6 @@
       "name": "User Service (via Gateway) → Delete User by Username",
       "request": {
         "method": "DELETE",
-        "header": [],
         "url": {
           "raw": "{{base_url}}:{{gateway_port}}/api/users/protected/by-username/{{username}}",
           "host": [
@@ -328,32 +354,28 @@
     {
       "listen": "prerequest",
       "script": {
+        "type": "text/javascript",
         "exec": [
-          "// Add CSRF token automatically for unsafe HTTP methods",
-          "const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];",
-          "const method = pm.request.method;",
-          "const token = pm.environment.get('csrf_token');",
-          "",
-          "if (unsafeMethods.includes(method)) {",
-          "    if (token) {",
-          "        pm.request.headers.remove('X-XSRF-TOKEN');",
-          "        pm.request.headers.add({ key: 'X-XSRF-TOKEN', value: token });",
-          "        console.log(`✅ Added X-XSRF-TOKEN header for ${method} request:`, token);",
-          "    } else {",
-          "        console.warn(`⚠️ No csrf_token found in environment before ${method} request.`);",
-          "    }",
-          "} else {",
-          "    console.log(`ℹ️ CSRF header not needed for ${method} request.`);",
+          "// Auto-add X-XSRF-TOKEN for protected endpoints",
+          "const url = pm.request.url.toString();",
+          "if (url.includes('/protected')) {",
+          "  const token = pm.environment.get('csrf_token');",
+          "  if (token) {",
+          "    pm.request.headers.remove('X-XSRF-TOKEN');",
+          "    pm.request.headers.add({ key: 'X-XSRF-TOKEN', value: token });",
+          "    console.log('✅ Added X-XSRF-TOKEN header for protected request:', token);",
+          "  } else {",
+          "    console.warn('⚠️ No csrf_token found before protected request');",
+          "  }",
           "}"
-        ],
-        "type": "text/javascript"
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
-        "exec": [],
-        "type": "text/javascript"
+        "type": "text/javascript",
+        "exec": []
       }
     }
   ]
