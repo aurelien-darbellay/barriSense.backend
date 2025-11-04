@@ -2,7 +2,7 @@ package com.barrisense.backend.user.messaging;
 
 import com.barrisense.backend.user.dto.UserCreatedEvent;
 import com.barrisense.backend.user.entity.User;
-import com.barrisense.backend.user.service.UserService;
+import com.barrisense.backend.user.service.ports.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -1,6 +1,6 @@
 package com.barrisense.backend.auth.controller;
 
-import com.barrisense.backend.auth.service.AuthServiceImpl;
+import com.barrisense.backend.auth.service.ports.AuthService;
 import com.barrisense.backend.auth.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProtectedAuthController {
 
-    private final AuthServiceImpl authServiceImpl;
+    private final AuthService authService;
     static private final Logger log = LoggerFactory.getLogger(ProtectedAuthController.class);
 
     @PostMapping("/refresh")
@@ -33,7 +33,7 @@ public class ProtectedAuthController {
                     .body(Map.of("message", "Missing refresh token"));
         }
         try {
-            String newAccessToken = authServiceImpl.refresh(refreshToken);
+            String newAccessToken = authService.refresh(refreshToken);
             response.addHeader("Set-Cookie", CookieUtil.formatCookieHeader("JWT", newAccessToken, 3600));
             return ResponseEntity.ok(Map.of("message", "Access token refreshed"));
         } catch (IllegalArgumentException e) {

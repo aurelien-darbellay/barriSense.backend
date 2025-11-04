@@ -2,6 +2,7 @@ package com.barrisense.backend.user.service;
 
 import com.barrisense.backend.user.entity.User;
 import com.barrisense.backend.user.repository.UserRepository;
+import com.barrisense.backend.user.service.ports.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -42,7 +43,7 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalStateException("Email already exists: " + user.getEmail());
         }
-        
+
         return userRepository.save(user);
     }
 

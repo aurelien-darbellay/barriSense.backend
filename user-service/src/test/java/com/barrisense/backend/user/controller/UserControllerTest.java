@@ -1,7 +1,7 @@
 package com.barrisense.backend.user.controller;
 
 import com.barrisense.backend.user.entity.User;
-import com.barrisense.backend.user.service.UserService;
+import com.barrisense.backend.user.service.ports.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
