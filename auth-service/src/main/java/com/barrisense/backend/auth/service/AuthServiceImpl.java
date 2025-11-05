@@ -6,7 +6,7 @@ import com.barrisense.backend.auth.dto.AuthDtos;
 import com.barrisense.backend.auth.dto.TokenPair;
 import com.barrisense.backend.auth.dto.UserCreatedEvent;
 import com.barrisense.backend.auth.messaging.UserEventPublisher;
-import com.barrisense.backend.auth.repository.UserRepository;
+import com.barrisense.backend.auth.service.ports.UserRepositoryPort;
 import com.barrisense.backend.auth.service.mappers.Mappers;
 import com.barrisense.backend.auth.service.ports.AuthService;
 import com.barrisense.backend.auth.service.ports.JwtService;
@@ -28,10 +28,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryPort userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtServiceImpl;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final UserEventPublisher userEventPublisher;
     private final Mappers mappers;
@@ -71,18 +71,18 @@ public class AuthServiceImpl implements AuthService {
 
     public String refresh(String refreshToken) {
         log.debug("Refreshing Jwt: {}", refreshToken);
-        String username = jwtServiceImpl.extractUsername(refreshToken);
+        String username = jwtService.extractUsername(refreshToken);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if (!jwtServiceImpl.isTokenValid(refreshToken, userDetails)) {
+        if (!jwtService.isTokenValid(refreshToken, userDetails)) {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
-        return jwtServiceImpl.generateAccessToken(userDetails);
+        return jwtService.generateAccessToken(userDetails);
     }
 
     private TokenPair createTokenPair(UserDetails userDetails) {
-        String accessToken = jwtServiceImpl.generateAccessToken(userDetails);
-        String refreshToken = jwtServiceImpl.generateRefreshToken(userDetails);
+        String accessToken = jwtService.generateAccessToken(userDetails);
+        String refreshToken = jwtService.generateRefreshToken(userDetails);
 
         return new TokenPair(accessToken, refreshToken);
     }

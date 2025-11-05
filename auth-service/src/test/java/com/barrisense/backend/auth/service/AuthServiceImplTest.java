@@ -5,7 +5,6 @@ import com.barrisense.backend.auth.domain.User;
 import com.barrisense.backend.auth.dto.AuthDtos;
 import com.barrisense.backend.auth.dto.TokenPair;
 import com.barrisense.backend.auth.messaging.UserEventPublisher;
-import com.barrisense.backend.auth.repository.UserRepository;
 import com.barrisense.backend.auth.service.mappers.Mappers;
 import com.barrisense.backend.auth.service.ports.JwtService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +30,7 @@ import static org.mockito.Mockito.*;
 class AuthServiceImplTest {
 
     @Mock
-    private UserRepository userRepository;
+    private com.barrisense.backend.auth.service.ports.UserRepositoryPort userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -52,7 +51,7 @@ class AuthServiceImplTest {
         Mappers mappers = new Mappers();
 
         // ✅ Real CustomUserDetailsService (wired with mocks and real mapper)
-        CustomUserDetailsService realUserDetailsService = new CustomUserDetailsService(userRepository, mappers);
+    CustomUserDetailsService realUserDetailsService = new CustomUserDetailsService(userRepository, mappers);
 
         ReflectionTestUtils.setField(authService, "userDetailsService", realUserDetailsService);
         ReflectionTestUtils.setField(authService, "mappers", mappers);

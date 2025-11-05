@@ -1,7 +1,7 @@
 package com.barrisense.backend.auth.repository;
 
 import com.barrisense.backend.auth.domain.Role;
-import com.barrisense.backend.auth.domain.User;
+import com.barrisense.backend.auth.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,19 +21,19 @@ class UserPersistenceTest {
     @Test
     void whenSavingUser_thenUserRolesEntryIsCreated() {
         // given
-        User user = User.builder()
-                .username("alice")
-                .password("secret")
-                .build();
+    UserEntity user = UserEntity.builder()
+        .username("alice")
+        .password("secret")
+        .build();
 
-        // when
-        userRepository.save(user);
-        em.flush(); // force Hibernate to write to DB
+    // when
+    userRepository.save(user);
+    em.flush(); // force Hibernate to write to DB
 
-        // then
-        // verify the main entity exists
-        var found = userRepository.findByUsername("alice").orElseThrow();
-        assertThat(found.getRoles()).containsExactly(Role.ROLE_USER);
+    // then
+    // verify the main entity exists
+    var found = userRepository.findByUsername("alice").orElseThrow();
+    assertThat(found.getRoles()).containsExactly(Role.ROLE_USER);
 
         // verify the user_roles table got a record
         var count = em.getEntityManager()
