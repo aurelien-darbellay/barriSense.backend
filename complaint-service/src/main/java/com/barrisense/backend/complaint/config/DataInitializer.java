@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 
 /**
@@ -82,11 +83,10 @@ public class DataInitializer implements CommandLineRunner {
                 barrioSeleccionado = neighborhoods.get(random.nextInt(neighborhoods.size()));
             }
 
-            Long userIdRandom = (long) (random.nextInt(50) + 1);
             String quejaRandom = quejas.get(random.nextInt(quejas.size()));
 
             Complaint complaint = Complaint.builder()
-                    .userId(userIdRandom)
+                    .userId(UUID.randomUUID())
                     .hoodId(barrioSeleccionado.getId())
                     .hoodName(barrioSeleccionado.getName())
                     .content(quejaRandom)

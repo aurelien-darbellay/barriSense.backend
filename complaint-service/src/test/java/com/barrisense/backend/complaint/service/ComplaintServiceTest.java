@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -29,9 +30,9 @@ class ComplaintServiceTest {
     void whenFindAll_shouldReturnComplaintList() {
         // ARRANGE
         Complaint complaint1 = Complaint.builder()
-                .userId(1L).hoodId(1L).hoodName("Test Hood 1").content("Content 1").build();
+                .userId(UUID.randomUUID()).hoodId(1L).hoodName("Test Hood 1").content("Content 1").build();
         Complaint complaint2 = Complaint.builder()
-                .userId(2L).hoodId(2L).hoodName("Test Hood 2").content("Content 2").build();
+                .userId(UUID.randomUUID()).hoodId(2L).hoodName("Test Hood 2").content("Content 2").build();
         List<Complaint> complaintList = Arrays.asList(complaint1, complaint2);
 
         when(complaintRepository.findAll()).thenReturn(complaintList);
@@ -50,7 +51,7 @@ class ComplaintServiceTest {
         // ARRANGE
         Long complaintId = 1L;
         Complaint complaint = Complaint.builder()
-                .id(complaintId).userId(1L).hoodId(1L).hoodName("Test Hood").content("Content").build();
+                .id(complaintId).userId(UUID.randomUUID()).hoodId(1L).hoodName("Test Hood").content("Content").build();
 
         when(complaintRepository.findById(complaintId)).thenReturn(Optional.of(complaint));
 
@@ -96,9 +97,9 @@ class ComplaintServiceTest {
         // ARRANGE
         Long hoodId = 5L;
         Complaint complaint1 = Complaint.builder()
-                .userId(1L).hoodId(hoodId).hoodName("Hood 5").content("Content A").build();
+                .userId(UUID.randomUUID()).hoodId(hoodId).hoodName("Hood 5").content("Content A").build();
         Complaint complaint2 = Complaint.builder()
-                .userId(2L).hoodId(hoodId).hoodName("Hood 5").content("Content B").build();
+                .userId(UUID.randomUUID()).hoodId(hoodId).hoodName("Hood 5").content("Content B").build();
         List<Complaint> filteredList = Arrays.asList(complaint1, complaint2);
 
         when(complaintRepository.findByHoodId(hoodId)).thenReturn(filteredList);

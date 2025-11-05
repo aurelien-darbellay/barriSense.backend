@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +43,7 @@ class ComplaintControllerTest {
     void whenGetAllComplaints_shouldReturnComplaintList() throws Exception {
         // ARRANGE
         Complaint complaint1 = Complaint.builder()
-                .id(1L).userId(1L).hoodId(1L).hoodName("Hood1").content("Content1").build();
+                .id(1L).userId(UUID.randomUUID()).hoodId(1L).hoodName("Hood1").content("Content1").build();
         List<Complaint> complaintList = Arrays.asList(complaint1);
         when(complaintService.findAll()).thenReturn(complaintList);
 
@@ -58,7 +59,7 @@ class ComplaintControllerTest {
     void whenGetComplaintById_withValidId_shouldReturnComplaint() throws Exception {
         // ARRANGE
         Complaint complaint = Complaint.builder()
-                .id(1L).userId(1L).hoodId(1L).hoodName("Hood1").content("Content1").build();
+                .id(1L).userId(UUID.randomUUID()).hoodId(1L).hoodName("Hood1").content("Content1").build();
         when(complaintService.findById(1L)).thenReturn(Optional.of(complaint));
 
         // ACT & ASSERT
@@ -97,7 +98,7 @@ class ComplaintControllerTest {
         // ARRANGE
         Long hoodId = 3L;
         Complaint complaint1 = Complaint.builder()
-                .userId(1L).hoodId(hoodId).hoodName("Hood3").content("ContentA").build();
+                .userId(UUID.randomUUID()).hoodId(hoodId).hoodName("Hood3").content("ContentA").build();
         List<Complaint> filteredList = Arrays.asList(complaint1);
         when(complaintService.findAllByHoodId(hoodId)).thenReturn(filteredList);
 
