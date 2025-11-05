@@ -4,6 +4,8 @@ package com.barrisense.backend.complaint.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 
 @Builder
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class Complaint {
     @Column(name = "user_id", nullable = false)
     @Getter
     @Setter
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "hood_id", nullable = false)
     @Getter
