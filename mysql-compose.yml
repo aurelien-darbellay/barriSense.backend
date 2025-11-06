@@ -1,0 +1,40 @@
+
+  version: "3.9"
+  name: barrisense-mysql-db
+
+  services:
+    mysql-db:
+      image: mysql:8.0
+      container_name: mysql-db
+      hostname: mysql-db # ❗️ Importante: debe coincidir con el application.yml
+
+      environment:
+
+        MYSQL_ROOT_PASSWORD: YourRootPassword123!
+
+
+        MYSQL_DATABASE: complaints_db
+
+
+        MYSQL_USER: barrisense_user
+        MYSQL_PASSWORD: YourAppPassword123!
+
+      ports:
+
+        - "3307:3306"
+
+      networks:
+
+        barrisense-net:
+
+      volumes:
+        # Esto "persiste" los datos. Si paras y arrancas el contenedor,
+
+        - mysql-data:/var/lib/mysql
+
+  networks:
+    barrisense-net:
+      external: true
+
+  volumes:
+    mysql-data:

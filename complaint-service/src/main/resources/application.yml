@@ -5,37 +5,41 @@ spring:
   application:
     name: barrisense-feedback-api
 
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-
+  # 1. El driver, la URL y las credenciales cambian
   datasource:
-    url: jdbc:h2:mem:barrisensedb;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # ❗️ Esta URL es clave. 'mysql-db' será el nombre del *servicio*
+    #    de MySQL dentro de la red de Docker (no 'localhost')
+    url: jdbc:mysql://mysql-db:3306/complaints_db?useSSL=false&allowPublicKeyRetrieval=true
 
+    # Usamos variables de entorno (es la mejor práctica)
+    # Las definiremos en el Docker Compose más tarde
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  # 2. Le decimos a Hibernate que "hable" MySQL
   jpa:
     hibernate:
+      # 'update' creará las tablas (como 'complaints')
+      # basándose en tu entidad Complaint.java
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        # Definimos el dialecto específico
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # 3. Desactivamos la carga de scripts por defecto
+  sql:
+    init:
+      mode: never # Ya no queremos que ejecute schema.sql  y data.sql  cada vez
 
   profiles:
     active: dev
-
-  sql:
-    init:
-      mode: always
 
 logging:
   level:
     root: INFO
     com.barriSenseBack.barrisense_feedback_api: DEBUG
     org.hibernate.SQL: DEBUG
-
-

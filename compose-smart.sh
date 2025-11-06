@@ -26,6 +26,7 @@ GHCR_NAMESPACE="ghcr.io/barrisense"
 
 DOCKER_COMPOSE_DEV="docker-compose-dev.yml"
 DOCKER_COMPOSE_RABBIT="rabbit-compose.yml"
+DOCKER_COMPOSE_MYSQL="mysql-compose.yml"
 
 get_version() {
   local service=$1
@@ -68,6 +69,15 @@ run_rabbit() {
   fi
 }
 
+run_mysql() {
+  if [[ -f "$DOCKER_COMPOSE_MYSQL" ]]; then
+    echo "🐬 Starting MySQL via $DOCKER_COMPOSE_MYSQL..."
+    docker compose -f "$DOCKER_COMPOSE_MYSQL" up -d
+  else
+    echo "⚠️  No $DOCKER_COMPOSE_MYSQL file found. Skipping MySQL."
+  fi
+}
+
 SERVICE_ARG=$1
 if [[ -z "$SERVICE_ARG" ]]; then
   echo "Usage: ./compose-smart.sh <service-name> | all"
@@ -76,6 +86,7 @@ fi
 
 if [[ "$SERVICE_ARG" == "all" ]]; then
   run_rabbit
+  run_mysql
 
   declare -A VERSIONS
   for SERVICE in "${SERVICES[@]}"; do
