@@ -9,11 +9,10 @@ you have **no Java or IDE** installed.
 
 ## 🧱 Microservice Architecture
 
-- **gateway-service** → entry point, routes all API traffic and hosts aggregated Swagger UI
-- **auth-service** → manages authentication, CSRF tokens, JWT, and registration/login
+- **gateway-service** → entry point, manages CSRF token, routes all API traffic and hosts aggregated Swagger UI
+- **auth-service** → manages authentication, JWT, and registration/login
 - **user-service** → handles user data, profiles, and CRUD operations
 - **complaint-service** → manages complaints and related workflows
-- **feedback-service** → handles feedback submissions and neighborhood insights
 - **rabbitmq** → message broker for asynchronous communication between services
 - *(shared library)* **error-response-core** → centralized error-handling and response models
 
@@ -147,6 +146,7 @@ How to Use:
 ## 🐇 RabbitMQ Management Console
 
 Once RabbitMQ starts, open:
+
 ```
 http://localhost:15672
 ```
@@ -163,24 +163,34 @@ You can monitor queues and message flow between microservices.
 ## 🧠 Running Without Java or IDE
 
 If you have no Java environment:
+
 1. Make scripts executable (first time only):
+
 ```bash
 chmod +x compose-smart.sh run-all.sh stop-all.sh
 ```
+
 2. Start the full backend:
+
 ```bash
 ./compose-smart.sh all
 ```
+
 This will:
+
 - Create the `barrisense-net` network
 - Start RabbitMQ
 - Build Docker images for each service
 - Launch all containers in the background
+
 3. Check running containers:
+
 ```bash
 docker ps
 ```
+
 4. Stop all containers:
+
 ```bash
 docker compose -f docker-compose-dev.yml down
 docker compose -f rabbit-compose.yml down
