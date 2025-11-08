@@ -6,7 +6,7 @@
     mysql-db:
       image: mysql:8.0
       container_name: mysql-db
-      hostname: mysql-db # ❗️ Importante: debe coincidir con el application.yml
+      hostname: mysql-db
 
       environment:
 
@@ -32,9 +32,17 @@
 
         - mysql-data:/var/lib/mysql
 
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pYourRootPassword123!" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
   networks:
     barrisense-net:
       external: true
 
   volumes:
     mysql-data:
+
+

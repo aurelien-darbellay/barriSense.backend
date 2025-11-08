@@ -1,0 +1,27 @@
+spring:
+
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    hibernate:
+
+      ddl-auto: update
+
+    defer-database-initialization: true
+
+  datasource:
+
+    url: jdbc:mysql://mysql-db:3306/auth_db?useSSL=false&allowPublicKeyRetrieval=true
+
+
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+    hikari:
+
+      initialization-fail-timeout: 60000

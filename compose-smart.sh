@@ -45,11 +45,11 @@ build_if_needed() {
   local version=$2
   local image="${GHCR_NAMESPACE}/${service}:${version}"
 
-  echo "🧠 Checking for local image: $image"
-
-  if docker image inspect "$image" > /dev/null 2>&1; then
-    echo "✅ Local image found: $image"
-  else
+#  echo "🧠 Checking for local image: $image"
+#
+#  if docker image inspect "$image" > /dev/null 2>&1; then
+#    echo "✅ Local image found: $image"
+#  else
     echo "❌ No local image found — building..."
     ROOT_PATH=$(pwd)
     docker build \
@@ -57,7 +57,7 @@ build_if_needed() {
       -t "$image" \
       -f "$ROOT_PATH/$service/Dockerfile" \
       "$ROOT_PATH"
-  fi
+
 }
 
 run_rabbit() {
@@ -72,7 +72,7 @@ run_rabbit() {
 run_mysql() {
   if [[ -f "$DOCKER_COMPOSE_MYSQL" ]]; then
     echo "🐬 Starting MySQL via $DOCKER_COMPOSE_MYSQL..."
-    docker compose -f "$DOCKER_COMPOSE_MYSQL" up -d
+#    docker compose -f "$DOCKER_COMPOSE_MYSQL" up -d
   else
     echo "⚠️  No $DOCKER_COMPOSE_MYSQL file found. Skipping MySQL."
   fi
