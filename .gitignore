@@ -8,3 +8,5 @@ out/
 .settings/
 *.iml
 .DS_Store
+.env
+*.env
