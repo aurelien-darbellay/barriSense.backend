@@ -5,17 +5,14 @@ spring:
   application:
     name: barrisense-feedback-api
 
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-
+  # --- CONFIGURACIÓN PARA EL IDE (LOCAL) ---
   datasource:
-    url: jdbc:h2:mem:barrisensedb;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # ❗️ APUNTA A LOCALHOST:3307 (Workbench)
+    url: jdbc:mysql://localhost:3307/complaints_db?useSSL=false&allowPublicKeyRetrieval=true
+    # ❗️ PON LAS CREDENCIALES DIRECTAMENTE
+    username: barrisense_user
+    password: YourAppPassword123! # (O la que pusiste en mysql-compose.yml)
 
   jpa:
     hibernate:
@@ -24,18 +21,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-  profiles:
-    active: dev
+        # dialect: org.hibernate.dialect.MySQLDialect # (Este ya no es necesario)
 
   sql:
     init:
-      mode: always
+      mode: never
 
 logging:
   level:
     root: INFO
     com.barriSenseBack.barrisense_feedback_api: DEBUG
     org.hibernate.SQL: DEBUG
-
-

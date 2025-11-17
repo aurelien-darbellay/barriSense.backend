@@ -17,6 +17,7 @@ services:
       - "8080"
 
 
+
   auth-service:
     image: ghcr.io/barrisense/auth-service:${AUTH_VERSION}
     container_name: auth-service
@@ -24,10 +25,16 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
+
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - barrisense-net
     expose:
       - "8081"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
 
   complaint-service:
     image: ghcr.io/barrisense/complaint-service:${COMPLAINT_VERSION}
@@ -36,10 +43,18 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
+
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - barrisense-net
     expose:
       - "8082"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
+
 
   user-service:
     image: ghcr.io/barrisense/user-service:${USER_VERSION}
@@ -48,11 +63,44 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
+
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - barrisense-net
     expose:
       - "8083"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    hostname: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: complaints_db
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    networks:
+      - barrisense-net
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
 
 networks:
   barrisense-net:
     external: true
+
+volumes:
+  mysql-data:
